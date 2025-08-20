@@ -1,0 +1,87 @@
+&control
+calculation  = 'scf'
+prefix       = 'mo2c-nacl'
+pseudo_dir = '/home/k0171/k017129/qe-6.7-rism/pseudo/SSSP_1.3.0_PBE_efficiency/'
+outdir       = '.'
+trism        = .true.
+/
+&system
+ibrav = 0,
+nat= 3, ntyp= 2,
+ecutwfc = 60, ecutrho = 480
+occupations = 'smearing', smearing = 'mp', degauss = 0.01
+assume_isolated = "esm", esm_bc = "bc1", tot_charge = -0.1500
+noncolin = .TRUE.
+lspinorb = .TRUE.
+/
+&electrons
+electron_maxstep = 800
+conv_thr = 1.D-8
+mixing_beta = 0.1
+diagonalization = 'rmm', diago_rmm_conv = .false., diago_rmm_ndim = 4
+/
+&rism
+nsolv    = 3, closure  = 'kh'
+tempv    = 300.0  ! Kelvin
+ecutsolv = 240  ! Rydberg
+!
+! Lennard-Jones for each atom
+!
+! For Mo using universal force field
+solute_lj(1) = 'none'
+solute_epsilon(1) = 0.056
+solute_sigma(1) = 3.052
+
+! For Mo using universal force field
+solute_lj(2) = 'none'
+solute_epsilon(2) = 0.056
+solute_sigma(2) = 3.052
+
+! For C using universal force field
+solute_lj(3) = 'none'
+solute_epsilon(3) = 0.105
+solute_sigma(3) = 3.851
+!
+! 1D-RISM's setting
+!
+starting1d      = 'zero'
+rism1d_conv_thr = 1.0e-8
+rism1d_maxstep  = 10000
+mdiis1d_size    = 20
+mdiis1d_step    = 0.5
+!
+! 3D-RISM's setting
+!
+starting3d      = 'zero'
+rism3d_maxstep  = 10000
+rism3d_conv_thr = 1.0e-6
+!
+! For Laue-RISM calculation
+! in a.u.
+!
+laue_expand_right = 100.0
+laue_starting_right = 8.56238
+/
+ATOMIC_SPECIES
+Mo  95.95   Mo.pbe-spn-kjpaw.UPF
+C   12.01   C.pbe-n-kjpaw.UPF
+
+CELL_PARAMETERS angstrom
+2.94093  0.00000  0.00000
+-1.46252  2.55020  0.00000
+0.00000  0.00000 60.03555
+
+ATOMIC_POSITIONS angstrom
+Mo    0.00874  1.69915  6.05908
+Mo    1.46923  0.85024  8.56238
+C    0.00000  0.00000  7.31064
+
+
+K_POINTS automatic
+  10 10 1 1 1 0
+         
+SOLVENTS {mol/L}
+H2O  -1.0  H2O.spc.MOL
+Na+   1.0  Na+.aq.MOL
+Cl-   1.0  Cl-.aq.MOL
+
